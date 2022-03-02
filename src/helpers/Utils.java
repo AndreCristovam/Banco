@@ -13,6 +13,14 @@ public class Utils {
     public static String dateToString(Date date) {
         return Utils.sdf.format(date);
     }
+    
+    public static Date stringToDate(String date) {
+    	try {
+    		return Utils.sdf.parse(date);
+    	}catch(ParseException e) {
+    		return null;
+    	}
+    }
 
     public static String doubleToString(Double value) {
         return Utils.nf.format(value);
@@ -32,5 +40,5 @@ public class Utils {
         }catch (InterruptedException e) {
             System.out.println("Erro ao pausar por " + seconds + " segundos.");
         }
-    }
+    }   
 }

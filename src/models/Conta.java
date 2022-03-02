@@ -1,12 +1,14 @@
 package models;
 
 import helpers.Utils;
+import interfaces.IConta;
 
-public class Conta {
+public class Conta implements IConta {
+	
 	private static int codigo = 1001;
 
 	private int numero;
-	private Cliente cliente;
+	private Cliente cliente;	
 	private Double saldo = 0.0;
 	private Double limite = 0.0;
 	private Double saldoTotal;
@@ -40,6 +42,7 @@ public class Conta {
 
 	public void setLimite(Double limete) {
 		this.limite = limete;
+		this.atualizaSaldoTotal();
 	}
 
 	public int getNumero() {
@@ -55,7 +58,11 @@ public class Conta {
 	}
 
 	public String toString() {
-		return "Número da Conta: " + this.getNumero() + "\nCliente: " + this.cliente.getNome() + "\nSaldo Total: "
+		return "Número da Conta: " + this.getNumero() + 
+				"\nCliente: " + this.cliente.getNome() + 
+				"\nSaldo: " + this.getSaldo() + 
+				"\nLimite: " + this.getLimite() + 
+				"\nSaldo Total: "
 				+ Utils.doubleToString(this.getSaldoTotal());
 	}
 
@@ -63,6 +70,11 @@ public class Conta {
 
 		if (valor > 0) {
 			this.saldo = this.getSaldo() + valor;
+			
+			if(valor > 1000) {
+				this.limite = 500.00;
+			}
+			
 			this.atualizaSaldoTotal();
 			System.out.println("Depósito efetuado com sucesso!");
 		} else {
@@ -78,10 +90,9 @@ public class Conta {
 				this.saldo = this.getSaldo() - valor;
 				this.atualizaSaldoTotal();
 				System.out.println("Saque efetuado com sucesso!");;
-			}else {
-			
+			}else {			
 				Double restante = this.getSaldo() - valor;
-				this.limite = this.getLimite() - restante;
+				this.limite = this.getLimite() + restante;
 				this.saldo = 0.0;
 				this.atualizaSaldoTotal();
 				System.out.println("Saque efetuado com sucesso!");
@@ -103,7 +114,7 @@ public class Conta {
 				System.out.println("Tranferência realizada com sucesso!");
 			}else {
 				Double restante = this.getSaldo() - valor;
-				this.limite = this.getLimite() - restante;
+				this.limite = this.getLimite() + restante;
 				this.saldo = 0.0;
 				destino.saldo = destino.getSaldo() + valor;
 				this.atualizaSaldoTotal();
